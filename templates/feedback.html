@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Обратная связь</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Обратная связь</h2>
+    <form method="POST" action="/feedback">
+        <div class="form-group">
+            <label for="age">Ваш возраст:</label>
+            <input type="number" id="age" name="age" min="0" required>
+        </div>
+
+        <div class="form-group">
+            <label>Вы бронировали жильё онлайн ранее?</label>
+            <select name="has_booked_before" required>
+                <option value="">Выберите</option>
+                <option value="yes">Да</option>
+                <option value="no">Нет</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Насколько вы удовлетворены результатами поиска?</label>
+            <select name="satisfaction_result" required>
+                <option value="">Выберите</option>
+                <option value="1">1 – очень плохо</option>
+                <option value="2">2 – плохо</option>
+                <option value="3">3 – нейтрально</option>
+                <option value="4">4 – хорошо</option>
+                <option value="5">5 – очень хорошо</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Насколько вы удовлетворены удобством поиска?</label>
+            <select name="satisfaction_usability" required>
+                <option value="">Выберите</option>
+                <option value="1">1 – очень плохо</option>
+                <option value="2">2 – плохо</option>
+                <option value="3">3 – нейтрально</option>
+                <option value="4">4 – хорошо</option>
+                <option value="5">5 – очень хорошо</option>
+            </select>
+        </div>
+
+        <label for="positive_feedback">Что вам понравилось в процессе поиска жилья?</label><br>
+        <textarea name="positive_feedback" rows="3" cols="50"></textarea><br><br>
+
+        <label for="negative_feedback">Что вызвало затруднения или неудобства?</label><br>
+        <textarea name="negative_feedback" rows="3" cols="50"></textarea><br><br>
+
+        <button type="submit">Отправить</button>
+    </form>
+</body>
+</html>

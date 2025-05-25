@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ property['names'] }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .back-link {
+            margin-top: 20px;
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        .review-list {
+        margin-top: 20px;
+        }
+        .review-card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 5px;
+            line-height: 1.5;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px 20px;
+            margin: 20px 0;
+        }
+
+        .amenity-item {
+            font-size: 15px;
+            padding: 6px 10px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+
+        #show-more-btn {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .booking-btn {
+            position: fixed;        /* фиксируем кнопку на экране */
+            top: 20px;             /* отступ сверху */
+            right: 20px;           /* отступ справа */
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 9999;         /* чтобы она была поверх всего */
+        }
+
+        .booking-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ property['names'] }}</h1>
+
+    {% if property.img %}
+        <img src="{{ property.img }}" alt="Property image">
+    {% endif %}
+
+    <p><strong>Цена (за ночь):</strong> ${{ property.price }}</p>
+    <p><strong>Рейтинг:</strong>
+        {% if property.rating > 0 %}
+            <span class="property-rating">★ {{ property.rating }}</span>
+        {% else %}
+            <span class="property-rating">Без рейтинга</span>
+        {% endif %}
+    </p>
+
+    <p><strong>Гости:</strong> {{ property.get('guests', '-') }}</p>
+    <p><strong>Комнаты:</strong> {{ property.get('bedrooms', '-') }}</p>
+    <p><strong>Кровати:</strong> {{ property.get('beds', '-') }}</p>
+
+    <p><strong>Описание:</strong></p>
+    <p>{{ property.description }}</p>
+
+    <h3>Какие удобства вас ждут</h3>
+    <div class="amenities-grid">
+        {% for a in property.cleaned_amenities %}
+            <div class="amenity-item" {% if loop.index > 8 %}style="display: none;"{% endif %}>
+                {{ a }}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if property.cleaned_amenities|length > 8 %}
+        <button id="show-more-btn" onclick="showAllAmenities()">Показать все удобства: {{ property.cleaned_amenities|length }}</button>
+    {% endif %}
+
+    <script>
+    function showAllAmenities() {
+            const hiddenItems = document.querySelectorAll('.amenity-item[style*="display: none"]');
+            hiddenItems.forEach(el => el.style.display = 'block');
+            const btn = document.getElementById('show-more-btn');
+            if (btn) btn.style.display = 'none';
+        }
+    </script>
+
+    <div class="review-list">
+        <h3>Отзывы:</h3>
+        {% for review in property.reviews %}
+            <div class="review-card">
+                <p>{{ review }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a class="back-link"
+       href="{{ url_for('search') }}?min-price={{ filters['min-price'] }}&max-price={{ filters['max-price'] }}&rating={{ filters['rating'] }}&sort-by={{ filters['sort-by'] }}">
+        ← Назад к списку
+    </a>
+
+    <form method="POST" action="{{ url_for('book_property', property_id=property.ID) }}">
+        <button type="submit" class="booking-btn">Забронировать</button>
+    </form>
+
+</body>
+</html>
+

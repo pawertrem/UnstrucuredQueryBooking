@@ -1,0 +1,7 @@
+Flask
+pandas
+uuid
+torch
+scikit-learn
+sentence_transformers
+numpy
